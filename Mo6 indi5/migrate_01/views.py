@@ -4,6 +4,9 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import AsignaturaFormularioForms
+from django.contrib import messages
+
+
 # Create your views here.
 
 def asignaturax(request):
@@ -67,12 +70,13 @@ def crear_asignatura(request):
     context = {'asignatura': asignatura}
     if asignatura.is_valid():
         form_data = asignatura.cleaned_data
-        Asignatura.objects.create(
+        asignatura = Asignatura.objects.create(
                     nombre=form_data['nombre'], 
 					descripcion=form_data['descripcion'], 
 					departamento_id=form_data['departamento_id'], 
 					profesor_id=form_data['profesor_id'],
                     )
+        messages.success(request, 'La asignatura de ID= '+str(asignatura.id)+' ha sido creada!, Felicitaciones')
         return redirect('migrate_01:mostrar_asignatura')
     return render(request, 'migrate_01/crear_asignatura.html', context)
 
@@ -121,5 +125,7 @@ class ListarAsignatura(ListView):
     model= AsignaturaFormularioForms 
     fields= '__all__'
     success_url = reverse_lazy('migrate_01:lista_asignatura')
+
+
 
 
