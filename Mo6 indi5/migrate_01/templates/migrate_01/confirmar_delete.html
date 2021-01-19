@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="{% url 'migrate_01:eliminar_asignatura' id=id %}" method="POST"> 
+        {% csrf_token %} 
+        Está seguro de eliminar la asignatura con id = {{id}}? 
+        <input type="submit" value="Sí" /> 
+        <a href="{% url 'migrate_01:mostrar_asignatura' %}">Cancelar</a> 
+    </form> 
+</body>
+</html>

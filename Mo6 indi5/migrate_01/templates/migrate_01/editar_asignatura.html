@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Editando asignatura id: {{id}}</h1>
+    <form action="" method="post" novalidate>
+        {% csrf_token %}
+        <table border="1">
+            {{formulario_asignatura.as_table}}
+        </table>
+        <input type="submit" value="Guardar">
+        <a href="{% url 'migrate_01:mostrar_asignatura' %}"><button type="button">Cancelar</button></a>
+
+    </form>
+</body>
+
+</html>

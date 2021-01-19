@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'migrate_01/css/style.css' %}">
+  
+</head>
+<body>
+    <h2>Listado Actualizado de Nuestras Asignatura</h2>
+    <h4><a class= "boton" href=" {% url 'migrate_01:crear_asignatura' %} ">Crear otra asignatura</a></h4>
+    <table class="table">
+        <tr>
+            <th>id</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>departamento_id</th>
+            <th>profesor_id</th>
+            <th></th>
+            <th></th>
+        </tr>    
+
+    {% for asignatura in asignatura %}
+        <tr>
+            <td>{{asignatura.id}}</td>
+            <td>{{asignatura.nombre}}</td>
+            <td>{{asignatura.descripcion}}</td>
+            <td>{{asignatura.departamento_id_id}}</td>
+            <td>{{asignatura.profesor_id_id}}</td>
+            <td>
+                <a class="boton" href="{% url 'migrate_01:editar_asignatura' id=asignatura.id %}"> Editar</a>
+            </td>
+            <td>
+                <a class="boton" href="{% url 'migrate_01:eliminar_asignatura' id=asignatura.id %}"> Eliminar</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+</body>
+</html>

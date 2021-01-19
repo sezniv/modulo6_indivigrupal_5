@@ -20,6 +20,9 @@ class Asignatura(models.Model):
     departamento_id = models.ForeignKey(Departamento,on_delete=models.CASCADE, null=True)
     profesor_id = models.ForeignKey(Profesor,on_delete=models.CASCADE, null =True)
 
+    class Meta:
+        ordering = ['id']
+
 
 class Curso(models.Model):
     nombre = models.CharField(max_length=40)

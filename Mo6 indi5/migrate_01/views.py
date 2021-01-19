@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Departamento,Asignatura,Profesor,Alumno,Transportista
 from django.urls import reverse_lazy
 from django.views.generic import ListView
@@ -50,11 +50,57 @@ def mostrar_alumnos(request):
     datos = {'alumnos': listar_alumnos}
     return render(request,'migrate_01/ver_alumnos.html', context= datos)
 
+def mostrar_asignatura(request):
+    listar_asignatura = list(Asignatura.objects.all().values())
+    datos = {'asignatura': listar_asignatura}
+    return render(request,'migrate_01/ver_asignatura.html', context= datos)
+
 #MUESTRA TRANSPORTISTAS
 def mostar_transportistas(request):
     lista_transportista = list(Transportista.objects.all().values())
     datos = {'transportistas': lista_transportista}
     return render(request,'migrate_01/ver_transportistas.html', context= datos)
+
+#CREAR ASIGNATURA
+def crear_asignatura(request):
+    asignatura = AsignaturaFormularioForms(request.POST or None)
+    context = {'asignatura': asignatura}
+    if asignatura.is_valid():
+        form_data = asignatura.cleaned_data
+        Asignatura.objects.create(
+                    nombre=form_data['nombre'], 
+					descripcion=form_data['descripcion'], 
+					departamento_id=form_data['departamento_id'], 
+					profesor_id=form_data['profesor_id'],
+                    )
+        return redirect('migrate_01:mostrar_asignatura')
+    return render(request, 'migrate_01/crear_asignatura.html', context)
+
+#EDITAR ASIGNATURA
+def editar_asignatura(request, id):
+    asignatura = Asignatura.objects.filter(id=id).values()[0]
+    formulario_asignatura = AsignaturaFormularioForms(request.POST or None, initial=asignatura)    
+    if formulario_asignatura.is_valid():
+        form_data = formulario_asignatura.cleaned_data
+        Asignatura.objects.filter(id=id).update(
+                    nombre=form_data['nombre'], 
+					descripcion=form_data['descripcion'], 
+					departamento_id=form_data['departamento_id'], 
+					profesor_id=form_data['profesor_id'],
+                    )
+
+        return redirect('migrate_01:mostrar_asignatura')
+    context = {'formulario_asignatura': formulario_asignatura, 'id' : id}
+    return render(request, 'migrate_01/editar_asignatura.html', context)
+
+#ELIMINAR ASIGNATURA
+
+def eliminar_asignatura(request, id):
+    if request.method == "POST":
+        Asignatura.objects.filter(id=id).delete()
+        return redirect('migrate_01:mostrar_asignatura')
+    context = {'id': id} 
+    return render(request, "migrate_01/confirmar_delete.html", context)
 
 class CrearAsignatura(CreateView):
     model= AsignaturaFormularioForms 
